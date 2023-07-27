@@ -25,7 +25,7 @@ template_id = os.environ["TEMPLATE_ID"]
 #   weather = res['data']['list'][0]
 #   return weather['weather'], math.floor(weather['temp'])
 
-if city is None or weather_apikey is None:
+if city is None or wai is None:
   print('没有城市行政区域编码或者apikey')
   city_id = None
 else:
