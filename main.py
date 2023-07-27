@@ -76,7 +76,7 @@ wm = WeChatMessage(client)
 # wea, temperature = get_weather()
 weather = get_weather()
 realtimeweather = get_realtimeweather()
-data = {"weather":{"value":f"白天：{weather['textDay']}  ;  夜晚：{weather['textNight']}"},
+data = {"weather":{"value":weather['textDay']},
         "temperature":{"value":realtimeweather},
         "love_days":{"value":get_count()},
         "birthday_left":{"value":get_birthday()},
