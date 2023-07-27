@@ -18,11 +18,35 @@ user_id = os.environ["USER_ID"]
 template_id = os.environ["TEMPLATE_ID"]
 
 
+# def get_weather():
+#   url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
+#   res = requests.get(url).json()
+#   weather = res['data']['list'][0]
+#   return weather['weather'], math.floor(weather['temp'])
+
+if city is None or weather_apikey is None:
+  print('没有城市行政区域编码或者apikey')
+  city_id = None
+else:
+  city_idurl = f"https://geoapi.qweather.com/v2/city/lookup?location={city}&key={wai}"
+  city_data = json.loads(requests.get(city_idurl).content.decode('utf-8'))['location'][0]
+  city_id = city_data.get("id")
+  city_name = city_data.get('name')
+
+# weather 直接返回对象，在使用的地方用字段进行调用。
 def get_weather():
-  url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
-  res = requests.get(url).json()
-  weather = res['data']['list'][0]
-  return weather['weather'], math.floor(weather['temp'])
+  if city_id is None:
+    return None
+  weatherurl = f"https://devapi.qweather.com/v7/weather/3d?location={city_id}&key={wai}&lang=zh"
+  weather = json.loads(requests.get(weatherurl).content.decode('utf-8'))["daily"][0]
+  return weather
+
+def get_realtimeweather():
+  if city_id is None:
+    return None
+  realtimeweatherurl = f"https://devapi.qweather.com/v7/weather/now?location={city_id}&key={wai}&lang=zh"
+  realtimeweather = json.loads(requests.get(realtimeweatherurl).content.decode('utf-8'))["now"]["temp"]
+  return realtimeweather
 
 def get_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
@@ -47,7 +71,14 @@ def get_random_color():
 client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
-wea, temperature = get_weather()
-data = {"weather":{"value":wea},"temperature":{"value":temperature},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
+# wea, temperature = get_weather()
+weather = get_weather()
+realtimeweather = get_realtimeweather()
+data = {"weather":{"value":f"白天：{weather['textDay']}  ;  夜晚：{weather['textNight']}",
+                   "temperature":{"value":realtimeweather},
+                   "love_days":{"value":get_count()},
+                   "birthday_left":{"value":get_birthday()},
+                   "words":{"value":get_words(), 
+                    "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 print(res)
