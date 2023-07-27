@@ -75,11 +75,11 @@ wm = WeChatMessage(client)
 # wea, temperature = get_weather()
 weather = get_weather()
 realtimeweather = get_realtimeweather()
-data = {"weather":{"value":f"白天：{weather['textDay']}  ;  夜晚：{weather['textNight']}",
-                   "temperature":{"value":realtimeweather},
-                   "love_days":{"value":get_count()},
-                   "birthday_left":{"value":get_birthday()},
-                   "words":{"value":get_words(), 
-                    "color":get_random_color()}}
+data = {"weather":{"value":f"白天：{weather['textDay']}  ;  夜晚：{weather['textNight']}"},
+        "temperature":{"value":realtimeweather},
+        "love_days":{"value":get_count()},
+        "birthday_left":{"value":get_birthday()},
+        "words":{"value":get_words(), 
+                            "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 print(res)
