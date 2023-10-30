@@ -76,11 +76,9 @@ def get_words():
     return get_words()
   # return words.json()['data']['text']
   wstr = words.json()['data']['text']
-  str_list = list(wstr)    # 字符串转list
-  if len(wstr) > 20:
-    str_list.insert(15, "\r")  # 在指定位置插入字符串
-  str_out = ''.join(str_list)    # 空字符连接
-  return  str_out
+  word_1 = wstr[0:17]
+  word_2 = wstr[17:-1]
+  return  word_1,word_2
 
 def get_random_color():
   return "#%06x" % random.randint(0, 0xFFFFFF)
@@ -92,11 +90,14 @@ wm = WeChatMessage(client)
 # wea, temperature = get_weather()
 weather = get_weather()
 realtimeweather = get_realtimeweather()
+word_1,word_2 = get_words()
 data = {"weather":{"value":weather['textDay']},
         "temperature":{"value":realtimeweather},
         "love_days":{"value":get_count()},
         "birthday_left":{"value":get_birthday()},
-        "words":{"value":get_words(), 
+        "words1":{"value":word_1, 
+                  "color":get_random_color()},
+        "words2":{"value":word_2, 
                   "color":get_random_color()}
        }
 res = wm.send_template(user_id, template_id, data)
