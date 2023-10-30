@@ -77,7 +77,7 @@ def get_words():
   # return words.json()['data']['text']
   wstr = words.json()['data']['text']
   word_1 = wstr[0:17]
-  word_2 = wstr[17:-1]
+  word_2 = wstr[17:]
   return  word_1,word_2
 
 def get_random_color():
