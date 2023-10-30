@@ -75,8 +75,9 @@ def get_words():
   if words.status_code != 200:
     return get_words()
   # return words.json()['data']['text']
-  str_list = list(words.json()['data']['text'])    # 字符串转list
-  if len(str_list) > 20:
+  wstr = words.json()['data']['text']
+  str_list = list(wstr)    # 字符串转list
+  if len(wstr) > 20:
     str_list.insert(20, "\r")  # 在指定位置插入字符串
   str_out = ''.join(str_list)    # 空字符连接
   return  str_out
