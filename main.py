@@ -57,8 +57,11 @@ def get_count():
 
 def get_birthday():
   # next = datetime.strptime(str(date.today().year) + "-" + birthday, "%Y-%m-%d")
-  
-  # 1、获取阴历生日，转为阳历
+
+  # 1、获取今日的农历日历
+  now = str(datetime.now().strftime('%Y-%m-%d')).split("-")
+  year, month, day = int(now[0]), int(now[1]), int(now[2])
+  # 2、获取阴历生日，转为阳历
   birth_month = int(birthday.split("-")[0].strip())
   birth_day = int(birthday.split("-")[-1].strip())
   birth_ying = ZhDate(year, birth_month, birth_day)
