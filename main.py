@@ -6,6 +6,7 @@ import requests
 import os
 import random
 import json
+from zhdate import ZhDate
 
 today = datetime.now()
 start_date = os.environ['START_DATE']
@@ -55,10 +56,17 @@ def get_count():
   return delta.days
 
 def get_birthday():
-  next = datetime.strptime(str(date.today().year) + "-" + birthday, "%Y-%m-%d")
+  # next = datetime.strptime(str(date.today().year) + "-" + birthday, "%Y-%m-%d")
+  
+  # 1、获取阴历生日，转为阳历
+  birth_month = int(birthday.split("-")[0].strip())
+  birth_day = int(birthday.split("-")[-1].strip())
+  birth_ying = ZhDate(year, birth_month, birth_day)
+  next = birth_ying.to_datetime()
   if next < datetime.now():
     next = next.replace(year=next.year + 1)
   return (next - today).days
+  
 
 def get_words():
   words = requests.get("https://api.shadiao.pro/chp")
